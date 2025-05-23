@@ -1,0 +1,26 @@
+sudo pacman -S iwd
+
+sudo systemctl enable --now iwd.service
+
+iwctl
+
+device list                            # pour repérer ton interface Wi-Fi (ex : wlan0)
+station wlan0 scan                    # scanner les réseaux Wi-Fi
+station wlan0 get-networks            # lister les réseaux détectés
+station wlan0 connect MonNomDeReseau  # se connecter (il demandera le mot de passe)
+
+
+ping archlinux.org #test
+
+
+-----------------------------------------------------
+
+Network Manager
+
+sudo pacman -S networkmanager
+
+sudo systemctl enable --now NetworkManager
+
+nmtui
+
+ping archlinux.org
