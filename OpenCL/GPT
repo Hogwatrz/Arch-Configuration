@@ -1,0 +1,56 @@
+How to install Intel CPU OpenCL runtime on Arch Linux
+1. Update system packages
+
+sudo pacman -Syu
+
+2. Install OpenCL ICD loader and clinfo utility
+
+sudo pacman -S opencl-icd-loader clinfo
+
+3. Install Intel OpenCL runtime from AUR
+
+Using an AUR helper like yay:
+
+yay -S intel-opencl-runtime
+
+4. Install missing dependencies (e.g., TBB)
+
+Intel runtime requires Intel Threading Building Blocks:
+
+sudo pacman -S tbb
+
+5. Verify the ICD file
+
+Check /etc/OpenCL/vendors/intelocl.icd exists and points to the Intel OpenCL library, usually:
+
+/opt/intel/oneapi/compiler/latest/lib/libintelocl.so
+
+6. Ensure the OpenCL library path is in your environment (optional)
+
+If needed, add this to your shell config (~/.bashrc or ~/.zshrc):
+
+export LD_LIBRARY_PATH=/opt/intel/oneapi/compiler/latest/lib:$LD_LIBRARY_PATH
+
+Then reload:
+
+source ~/.bashrc
+
+7. Reboot or log out/in to apply changes
+8. Test OpenCL installation
+
+clinfo
+hashcat -b
+
+You should see at least one platform (Intel CPU).
+Optional: Use pocl as an alternative CPU OpenCL runtime
+
+If you want a simpler or open-source alternative:
+
+sudo pacman -S pocl
+
+Disable Intel ICD file if needed:
+
+sudo mv /etc/OpenCL/vendors/intelocl.icd /etc/OpenCL/vendors/intelocl.icd.backup
+echo "/usr/lib/libpocl.so" | sudo tee /etc/OpenCL/vendors/pocl.icd
+
+Then test with clinfo again.
